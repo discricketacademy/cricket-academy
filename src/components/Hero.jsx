@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import './Hero.css';
+import HeroAnimation from './HeroAnimation';
 
 const Hero = ({ onJoin }) => {
     const heroRef = useRef(null);
@@ -26,6 +27,9 @@ const Hero = ({ onJoin }) => {
 
     return (
         <section id="home" className="hero-section" ref={heroRef}>
+            {/* Scroll Animation Background */}
+            <HeroAnimation />
+
             {/* Parallax Background */}
             <div className="hero-parallax-bg" />
             <div className="hero-overlay" />
