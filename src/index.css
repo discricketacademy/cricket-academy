@@ -560,3 +560,41 @@ img {
   background: var(--primary-color);
   border-radius: 3px;
 }
+
+/* ─── SCROLL REVEAL UTILITY ──────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
+  will-change: opacity, transform;
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal.delay-1 {
+  transition-delay: 0.1s;
+}
+
+.reveal.delay-2 {
+  transition-delay: 0.2s;
+}
+
+.reveal.delay-3 {
+  transition-delay: 0.3s;
+}
+
+/* ─── GLOBAL MOBILE OPTIMIZATIONS ───────── */
+@media (max-width: 768px) {
+  .section {
+    padding: 4rem 0;
+    /* Reduced from 6rem */
+  }
+
+  .container {
+    padding: 0 1.25rem;
+    /* Reduced from 2rem */
+  }
+}

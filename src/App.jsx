@@ -11,6 +11,7 @@ import AdminDashboard from './components/Admin/AdminDashboard';
 import Rules from './components/Rules';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import CustomCursor from './components/CustomCursor';
 import './index.css';
 
 function App() {
@@ -33,6 +34,40 @@ function App() {
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  // Global Scroll Reveal Observer Setup
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('active');
+            // Optional: observer.unobserve(entry.target) if we only want it to reveal once
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+    );
+
+    const observeElements = () => {
+      const revealElements = document.querySelectorAll('.reveal');
+      revealElements.forEach((el) => observer.observe(el));
+    };
+
+    // Initial observation
+    setTimeout(observeElements, 100);
+
+    // Watch for DOM changes to observe newly rendered views
+    const mutationObserver = new MutationObserver(() => {
+      observeElements();
+    });
+    mutationObserver.observe(document.body, { childList: true, subtree: true });
+
+    return () => {
+      observer.disconnect();
+      mutationObserver.disconnect();
+    };
   }, []);
 
   // Routing Handlers
@@ -101,6 +136,8 @@ function App() {
 
   return (
     <div className="app-container" style={{ backgroundColor: '#0B1F3A', minHeight: '100vh', color: '#fff' }}>
+      <CustomCursor />
+
       {/* Hide standard navbar deeply inside specific full-page views if needed, otherwise keep it */}
       {currentView !== 'player-profile' && currentView !== 'admin' && (
         <Navbar currentView={currentView} onNavigate={handleNavigate} />

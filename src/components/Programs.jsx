@@ -33,8 +33,8 @@ const Programs = () => {
         <section id="programs" className="section programs-section">
             <div className="programs-bg-glow" />
             <div className="container">
-                <div className="section-label animate-slide-in">OUR PROGRAMS</div>
-                <h2 className="section-title animate-fadeInUp">
+                <div className="section-label reveal">OUR PROGRAMS</div>
+                <h2 className="section-title reveal delay-1">
                     BUILD YOUR <span className="text-accent">GAME</span>
                 </h2>
                 <p className="section-subtitle">
@@ -45,8 +45,8 @@ const Programs = () => {
                     {programs.map((p, i) => (
                         <div
                             key={p.id}
-                            className="program-card animate-fadeInUp"
-                            style={{ animationDelay: `${i * 0.15}s`, '--prog-color': p.color }}
+                            className="program-card reveal"
+                            style={{ transitionDelay: `${i * 0.15}s`, '--prog-color': p.color }}
                         >
                             <div className="prog-label">{p.label}</div>
                             <div className="prog-icon">{p.icon}</div>

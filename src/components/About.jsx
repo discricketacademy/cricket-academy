@@ -15,7 +15,7 @@ const About = () => {
             <div className="container about-grid">
 
                 {/* Left: Image */}
-                <div className="about-image-col animate-fadeInLeft">
+                <div className="about-image-col reveal delay-1">
                     <div className="about-img-wrapper">
                         <img
                             src="https://images.unsplash.com/photo-1531415074968-036ba1b575da?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
@@ -39,7 +39,7 @@ const About = () => {
                 </div>
 
                 {/* Right: Text */}
-                <div className="about-text-col animate-fadeInRight">
+                <div className="about-text-col reveal delay-2">
                     <div className="section-label">WHO WE ARE</div>
                     <h2 className="about-heading">
                         DISCIPLINE.<br />

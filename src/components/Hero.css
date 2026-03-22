@@ -313,7 +313,31 @@
     }
 
     .hero-right {
+        display: flex;
+        justify-content: center;
+        margin-top: 2rem;
+    }
+
+    .hero-img-main {
         display: none;
+        /* Hide the big image, but keep floating cards */
+    }
+
+    .hero-float-cards {
+        position: relative;
+        right: 0;
+        top: 0;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    .hero-float-card {
+        min-width: 130px;
+        padding: 0.75rem 1rem;
+        animation: none;
+        /* disable floating so it doesn't look messy */
     }
 
     .hero-cta {

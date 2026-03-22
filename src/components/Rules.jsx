@@ -34,9 +34,9 @@ const Rules = () => {
     return (
         <section id="rules" className="section bg-light">
             <div className="container">
-                <h2 className="section-title">Rules & Guidelines</h2>
+                <h2 className="section-title reveal">Rules & Guidelines</h2>
 
-                <div className="accordion-container">
+                <div className="accordion-container reveal delay-1">
                     {rulesData.map((rule, index) => (
                         <div
                             key={index}

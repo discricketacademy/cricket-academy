@@ -11,8 +11,8 @@ const Contact = () => {
         <section id="contact" className="section contact-section">
             <div className="contact-bg-grid" />
             <div className="container">
-                <div className="section-label">REACH OUT</div>
-                <h2 className="section-title animate-fadeInUp">
+                <div className="section-label reveal">REACH OUT</div>
+                <h2 className="section-title reveal delay-1">
                     GET IN <span className="text-accent">TOUCH</span>
                 </h2>
                 <p className="section-subtitle">
@@ -21,7 +21,7 @@ const Contact = () => {
 
                 <div className="contact-grid">
                     {/* Left: Info */}
-                    <div className="contact-info-col animate-fadeInLeft">
+                    <div className="contact-info-col reveal delay-1">
                         <h3 className="contact-col-heading">Contact Us</h3>
                         <div className="contact-info-list">
                             {info.map((item, i) => (
@@ -43,7 +43,7 @@ const Contact = () => {
                     </div>
 
                     {/* Right: Form */}
-                    <div className="contact-form-col animate-fadeInRight">
+                    <div className="contact-form-col reveal delay-2">
                         <div className="contact-form-card glass-card">
                             <h3 className="contact-col-heading">Apply Now</h3>
                             <form className="contact-form" onSubmit={(e) => e.preventDefault()}>
