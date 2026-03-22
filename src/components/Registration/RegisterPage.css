@@ -1,10 +1,10 @@
 .register-wrapper {
     min-height: 100vh;
-    padding: 150px 0 100px 0;
-    background-color: var(--bg-main);
+    padding: 120px 0 100px 0;
+    background-color: var(--secondary-color);
     background-image:
-        radial-gradient(circle at 80% 20%, rgba(40, 167, 69, 0.05) 0%, transparent 40%),
-        radial-gradient(circle at 20% 80%, rgba(212, 175, 55, 0.05) 0%, transparent 40%);
+        radial-gradient(circle at 80% 20%, rgba(0, 230, 118, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 20% 80%, rgba(255, 215, 0, 0.05) 0%, transparent 40%);
 }
 
 .flex-center {
@@ -13,15 +13,34 @@
     justify-content: center;
 }
 
-.register-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
-    align-items: center;
+.register-top-bar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 2rem;
 }
 
-.register-content {
+.lang-toggle-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     color: white;
+    padding: 0.5rem 1.2rem;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.lang-toggle-btn:hover {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+.register-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 4rem;
+    align-items: start;
 }
 
 .register-title {
@@ -29,6 +48,7 @@
     font-weight: 800;
     line-height: 1.1;
     margin-bottom: 1.5rem;
+    color: white;
 }
 
 .register-subtitle {
@@ -44,44 +64,44 @@
 }
 
 .register-benefits li {
-    font-size: 1.15rem;
+    font-size: 1.1rem;
     margin-bottom: 1rem;
     display: flex;
     align-items: center;
-    font-weight: 600;
-}
-
-/* Form Card Styles */
-.register-form-card {
-    background-color: var(--bg-card);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: var(--radius-lg);
-    padding: 3rem;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-}
-
-.register-form-card h2 {
     color: white;
-    font-size: 1.8rem;
-    margin-bottom: 2rem;
+    font-weight: 500;
+}
+
+/* Form Styles */
+.register-form-card {
+    background-color: var(--secondary-mid);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 2.5rem;
+    box-shadow: var(--shadow-card);
+}
+
+.form-section {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.form-section:last-of-type {
+    border-bottom: none;
+}
+
+.section-title {
+    color: var(--primary-color);
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
     font-weight: 700;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding-bottom: 1rem;
-}
-
-.register-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-.form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .form-group {
+    margin-bottom: 1.2rem;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
@@ -91,83 +111,349 @@
     color: var(--text-light-muted);
     font-size: 0.85rem;
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
 }
 
 .form-group input,
+.form-group textarea,
 .form-group select {
-    background-color: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
     color: white;
     padding: 0.8rem 1rem;
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-md);
     font-size: 1rem;
     transition: all var(--transition-fast);
 }
 
 .form-group input:focus,
-.form-group select:focus {
+.form-group textarea:focus {
     outline: none;
     border-color: var(--primary-color);
-    background-color: rgba(0, 0, 0, 0.4);
     box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.2);
 }
 
-/* Specific fix for select options text color */
-.form-group select option {
-    background-color: var(--bg-card);
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+/* Radio & Checkbox Groups */
+.radio-group,
+.checkbox-group {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 0.5rem;
+}
+
+.radio-label,
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     color: white;
+    cursor: pointer;
+    font-size: 0.95rem;
 }
 
-.register-submit-btn {
+.radio-label input,
+.checkbox-label input {
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+}
+
+/* Signature Pad */
+.signature-container {
+    background: white;
+    border-radius: var(--radius-md);
+    padding: 10px;
+    position: relative;
+    border: 1px solid var(--glass-border);
+}
+
+.signature-canvas {
     width: 100%;
-    margin-top: 1rem;
-    padding: 1rem;
-    font-size: 1.1rem;
-    font-weight: 700;
-    letter-spacing: 1px;
+    height: 180px;
+    cursor: crosshair;
+    touch-action: none;
+    border-radius: 4px;
+    background: #f8f9fa;
 }
 
-.register-submit-btn:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
+.btn-clear {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 12px;
+    font-size: 0.75rem;
+    border-radius: 4px;
+    cursor: pointer;
+    opacity: 0.8;
 }
 
-/* Success Card */
-.register-success-card {
-    background-color: var(--bg-card);
-    border: 1px solid rgba(40, 167, 69, 0.3);
-    border-radius: var(--radius-lg);
-    padding: 4rem;
+.btn-clear:hover {
+    opacity: 1;
+}
+
+/* Professional PDF Template Styles */
+.pdf-template {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 10mm;
+    background: white;
+    color: #1a1a1a;
+    font-family: 'Helvetica', 'Arial', sans-serif;
+    display: flex;
+    flex-direction: column;
+    border: 15px solid #0B1F3A;
+    /* Professional Outer Border */
+    box-sizing: border-box;
+    position: relative;
+}
+
+/* Subtle Academy Watermark */
+.pdf-template::before {
+    content: "DIS CRICKET ACADEMY";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    font-size: 8rem;
+    color: rgba(11, 31, 58, 0.03);
+    font-weight: 900;
+    white-space: nowrap;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.pdf-header {
+    border-bottom: 3px double #0B1F3A;
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
-    max-width: 600px;
-    box-shadow: 0 20px 40px rgba(40, 167, 69, 0.1);
+    z-index: 1;
 }
 
-.success-icon {
-    width: 80px;
-    height: 80px;
-    background-color: rgba(40, 167, 69, 0.1);
-    color: var(--primary-color);
+.pdf-logo-area {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 8px;
+}
+
+.pdf-logo-circle {
+    background: #0B1F3A;
+    color: #00E676;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 3rem;
-    margin: 0 auto 2rem auto;
+    font-weight: 900;
+    font-size: 1.4rem;
+    border: 2px solid #00E676;
 }
 
-.register-success-card h2 {
-    color: white;
-    font-size: 2rem;
-    margin-bottom: 1rem;
+.pdf-academy-name {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #0B1F3A;
+    letter-spacing: 2px;
 }
 
-.register-success-card p {
-    color: var(--text-muted);
-    font-size: 1.1rem;
+.pdf-tagline {
+    font-size: 1rem;
+    color: #555;
+    font-style: italic;
+    margin-bottom: 15px;
+    font-weight: 500;
+}
+
+.pdf-doc-title {
+    background: #0B1F3A;
+    color: #00E676;
+    padding: 8px 30px;
+    border-radius: 0;
+    font-weight: 800;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    box-shadow: 4px 4px 0 rgba(0, 230, 118, 0.2);
+}
+
+.pdf-content {
+    flex-grow: 1;
+    z-index: 1;
+    padding: 0 10px;
+}
+
+.pdf-section {
+    margin-bottom: 25px;
+}
+
+.pdf-section-title {
+    background: #f4f7f9;
+    color: #0B1F3A;
+    padding: 6px 15px;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 15px;
+    border-left: 5px solid #0B1F3A;
+    font-weight: 800;
+}
+
+.pdf-row {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 12px;
+}
+
+.pdf-col {
+    flex: 1;
+    font-size: 11pt;
+    line-height: 1.5;
+}
+
+.pdf-col strong {
+    color: #0B1F3A;
+    font-weight: 700;
+    display: inline-block;
+    width: 140px;
+}
+
+.pdf-medical-box {
+    border: 1px solid #ccc;
+    padding: 12px;
+    background: #fff;
+    min-height: 70px;
+    font-size: 10.5pt;
+    border-radius: 0;
     line-height: 1.6;
+}
+
+.pdf-agreement-item {
+    font-size: 10pt;
+    margin-bottom: 8px;
+    color: #222;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.pdf-signature-section {
+    margin-top: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 20px;
+    background: #f9f9f9;
+    border: 1px solid #eee;
+}
+
+.pdf-sig-box {
+    width: 280px;
+}
+
+.pdf-sig-label {
+    font-size: 0.85rem;
+    color: #444;
+    margin-bottom: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.pdf-sig-image {
+    max-width: 220px;
+    max-height: 90px;
+    margin-bottom: 10px;
+}
+
+.pdf-sig-line {
+    border-bottom: 2px solid #0B1F3A;
+    margin-bottom: 8px;
+}
+
+.pdf-sig-name {
+    font-weight: 800;
+    font-size: 11pt;
+    color: #0B1F3A;
+}
+
+.pdf-sig-sub {
+    font-size: 9pt;
+    color: #666;
+}
+
+.pdf-stamp-box {
+    text-align: center;
+    border: 3px double #0B1F3A;
+    padding: 15px 25px;
+    color: #0B1F3A;
+    opacity: 0.6;
+}
+
+.pdf-stamp-circle {
+    font-weight: 900;
+    font-size: 0.8rem;
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+}
+
+.pdf-timestamp {
+    font-size: 9pt;
+    font-weight: 700;
+}
+
+.pdf-footer {
+    border-top: 2px solid #0B1F3A;
+    padding-top: 15px;
+    margin-top: 30px;
+    font-size: 8.5pt;
+    color: #666;
+    text-align: center;
+    font-weight: 500;
+}
+
+/* Success State */
+.register-success-card {
+    background: var(--bg-card);
+    padding: 4rem;
+    text-align: center;
+    border-radius: 20px;
+    border: 1px solid var(--primary-color);
+    max-width: 600px;
+}
+
+.success-icon {
+    font-size: 4rem;
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+}
+
+/* Animations */
+.animate-fadeIn {
+    animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Responsive */
@@ -188,10 +474,10 @@
     }
 
     .register-wrapper {
-        padding: 120px 0 50px 0;
+        padding: 100px 0 50px 0;
     }
 
-    .register-form-card {
-        padding: 2rem;
+    .signature-canvas {
+        height: 150px;
     }
 }
