@@ -227,3 +227,25 @@
         transform: rotate(360deg);
     }
 }
+
+@media (max-width: 768px) {
+    .dashboard-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .filter-tabs {
+        justify-content: center;
+        gap: 0.4rem;
+    }
+
+    .filter-btn {
+        padding: 0.45rem 1rem;
+        font-size: 0.7rem;
+    }
+
+    .roster-grid {
+        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+        gap: 1rem;
+    }
+}

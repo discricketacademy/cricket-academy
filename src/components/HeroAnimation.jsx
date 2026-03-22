@@ -16,18 +16,34 @@ const HeroAnimation = () => {
     };
 
     useEffect(() => {
+        // Progressive Loading Strategy: 
+        // 1. Load the first frame immediately for instant visibility
+        // 2. Load the others in background
         const loadImages = async () => {
-            const loadedImages = [];
-            for (let i = 1; i <= frameCount; i++) {
+            const loadedImages = new Array(frameCount).fill(null);
+
+            // First frame PRIORITY
+            const firstImg = new Image();
+            firstImg.src = getImageUrl(1);
+            await new Promise(resolve => {
+                firstImg.onload = resolve;
+                firstImg.onerror = resolve;
+            });
+            loadedImages[0] = firstImg;
+            setImages([...loadedImages]); // Instant render of frame 1
+
+            // Background load the rest
+            for (let i = 2; i <= frameCount; i++) {
                 const img = new Image();
                 img.src = getImageUrl(i);
-                await new Promise((resolve) => {
-                    img.onload = resolve;
-                    img.onerror = resolve; // Continue even if one fails
-                });
-                loadedImages.push(img);
+                img.onload = () => {
+                    loadedImages[i - 1] = img;
+                    // Batch updates to reduce unnecessary re-renders during loading
+                    if (i % 10 === 0 || i === frameCount) {
+                        setImages([...loadedImages]);
+                    }
+                };
             }
-            setImages(loadedImages);
         };
         loadImages();
     }, []);
@@ -40,48 +56,63 @@ const HeroAnimation = () => {
 
         let targetFrame = 0;
         let currentFrame = 0;
-        const lerpSpeed = 0.08; // Smoothing factor (0 to 1)
+        let lastFrame = 0;
+        const lerpSpeed = 0.12; // Snappier response
 
-        const renderFrame = (index) => {
+        const renderFrame = (index, velocity, forceImages) => {
+            const currentImages = forceImages || images;
             const frame = Math.round(index);
-            if (images[frame]) {
-                const img = images[frame];
+            if (currentImages[frame]) {
+                const img = currentImages[frame];
                 const canvasAspectRatio = canvas.width / canvas.height;
                 const imageAspectRatio = img.width / img.height;
 
-                let drawWidth, drawHeight, offsetX, offsetY;
-
-                // Creative: Add a slight zoom based on scroll progress
                 const scrollFactor = index / (frameCount - 1);
-                const zoom = 1 + (scrollFactor * 0.05); // Subtle 5% zoom
+                const isMobile = window.innerWidth < 900;
+
+                // Creative: Shift character to the LEFT on Desktop as requested 
+                // to reveal shirt details (DIS logo) in the gap.
+                const horizontalShift = isMobile ? 0 : -(canvas.width * 0.08);
+                const zoom = isMobile ? 1.05 : 1.1 + (scrollFactor * 0.06);
+
+                let drawWidth, drawHeight, offsetX, offsetY;
 
                 if (canvasAspectRatio > imageAspectRatio) {
                     drawWidth = canvas.width * zoom;
                     drawHeight = (canvas.width / imageAspectRatio) * zoom;
-                    offsetX = (canvas.width - drawWidth) / 2;
-                    offsetY = (canvas.height - drawHeight) / 2;
                 } else {
                     drawWidth = (canvas.height * imageAspectRatio) * zoom;
                     drawHeight = canvas.height * zoom;
-                    offsetX = (canvas.width - drawWidth) / 2;
-                    offsetY = (canvas.height - drawHeight) / 2;
                 }
 
+                // Center + Shift
+                offsetX = ((canvas.width - drawWidth) / 2) + horizontalShift;
+                offsetY = (canvas.height - drawHeight) / 2;
+
                 context.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Creative: Velocity-based motion blur for cinematic feel
+                const blurAmount = Math.min(Math.abs(velocity) * 1.5, 3);
+                context.filter = blurAmount > 0.5 ? `blur(${blurAmount}px)` : 'none';
+
                 context.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
             }
         };
 
         const animationLoop = () => {
-            // Smoothly interpolate towards target frame
-            currentFrame += (targetFrame - currentFrame) * lerpSpeed;
-            renderFrame(currentFrame);
+            const velocity = targetFrame - currentFrame;
+            currentFrame += velocity * lerpSpeed;
+
+            if (Math.abs(currentFrame - lastFrame) > 0.01) {
+                renderFrame(currentFrame, velocity);
+                lastFrame = currentFrame;
+            }
             requestAnimationFrame(animationLoop);
         };
 
         const handleScroll = () => {
             const scrollTop = window.scrollY;
-            const maxScroll = 700; // Animation plays faster
+            const maxScroll = 700;
             const scrollFraction = Math.min(scrollTop / maxScroll, 1);
             targetFrame = scrollFraction * (frameCount - 1);
         };
@@ -96,6 +127,9 @@ const HeroAnimation = () => {
         window.addEventListener('resize', handleResize);
         handleResize();
 
+        // Immediate render of the current state (Frame 0)
+        renderFrame(currentFrame, 0);
+
         const animationId = requestAnimationFrame(animationLoop);
 
         return () => {
@@ -106,22 +140,46 @@ const HeroAnimation = () => {
     }, [images]);
 
     return (
-        <canvas
-            ref={canvasRef}
-            className="hero-animation-canvas"
+        <div
+            className="hero-animation-container"
             style={{
                 position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                zIndex: 1, // Sit above base parallax but below container (z2)
-                opacity: 0.85, // Maximum visibility
-                pointerEvents: 'none',
-                objectFit: 'cover',
-                filter: 'brightness(1.1) contrast(1.1) saturate(1.2)' // Pop the colors
+                inset: 0,
+                zIndex: 1,
+                pointerEvents: 'none'
             }}
-        />
+        >
+            {/* Poster Frame: Instant visibility before Canvas is ready */}
+            <div
+                className="hero-animation-poster"
+                style={{
+                    position: 'absolute',
+                    inset: 0,
+                    backgroundImage: `url(${getImageUrl(1)})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    opacity: images[0] ? 0 : 0.75, // Fade out once Canvas starts
+                    transition: 'opacity 0.5s ease',
+                    mixBlendMode: 'screen',
+                    filter: 'brightness(1.1) contrast(1.3) saturate(1.2)'
+                }}
+            />
+
+            <canvas
+                ref={canvasRef}
+                className="hero-animation-canvas"
+                style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    opacity: 0.75,
+                    mixBlendMode: 'screen',
+                    filter: 'brightness(1.1) contrast(1.3) saturate(1.2)'
+                }}
+            />
+        </div>
     );
 };
 
