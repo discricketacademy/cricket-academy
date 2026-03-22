@@ -1,0 +1,191 @@
+/* Rules section accordion — global styles */
+#rules.section {
+    background: var(--secondary-color);
+}
+
+#rules .section-title {
+    color: white;
+}
+
+#rules .section-title::after {
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+}
+
+.accordion-container {
+    max-width: 800px;
+    margin: 3rem auto 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.accordion-item {
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: var(--radius-lg);
+    background: rgba(255, 255, 255, 0.03);
+    overflow: hidden;
+    transition: border-color var(--transition-normal);
+}
+
+.accordion-item.active {
+    border-color: var(--primary-color);
+    background: rgba(0, 230, 118, 0.04);
+}
+
+.accordion-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 1.5rem;
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: white;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    transition: color var(--transition-fast);
+}
+
+.accordion-item.active .accordion-header {
+    color: var(--primary-color);
+}
+
+.accordion-icon {
+    font-size: 1.4rem;
+    font-weight: 300;
+    color: var(--text-muted);
+    transition: transform var(--transition-normal), color var(--transition-normal);
+    flex-shrink: 0;
+}
+
+.accordion-item.active .accordion-icon {
+    transform: rotate(45deg);
+    color: var(--primary-color);
+}
+
+.accordion-content {
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.accordion-text {
+    padding: 0 1.5rem 1.3rem;
+    font-size: 0.92rem;
+    color: var(--text-soft);
+    line-height: 1.9;
+}
+
+/* ─── MODAL ─────────────────────────── */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    animation: fadeInUp 0.3s ease;
+}
+
+.modal-content {
+    background: var(--secondary-mid);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-xl);
+    max-width: 700px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    position: relative;
+    animation: slideInUp 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.7);
+}
+
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 10;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: white;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+    cursor: pointer;
+}
+
+.modal-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+.modal-header-banner {
+    position: relative;
+    height: 220px;
+    overflow: hidden;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+}
+
+.modal-banner-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    filter: blur(1px) brightness(0.5);
+    transform: scale(1.05);
+}
+
+.modal-banner-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, var(--secondary-mid) 0%, rgba(13, 31, 64, 0.4) 70%);
+}
+
+.modal-banner-info {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 1.5rem;
+}
+
+.modal-player-name {
+    font-size: 1.8rem;
+    font-weight: 900;
+    letter-spacing: 1px;
+    color: white;
+    margin-bottom: 0.2rem;
+}
+
+.modal-body {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.modal-section-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.modal-stat-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+}
