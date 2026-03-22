@@ -34,7 +34,7 @@ const PrintableCV = React.forwardRef(({ player }, ref) => {
     );
 
     const Ring = ({ value, label, color }) => {
-        const r = 35;
+        const r = 40;
         const circ = 2 * Math.PI * r;
         const offset = circ - (circ * value) / 100;
         return (
@@ -46,7 +46,7 @@ const PrintableCV = React.forwardRef(({ player }, ref) => {
                             strokeDasharray={circ} strokeDashoffset={offset} strokeLinecap="round"
                             style={{ transformOrigin: '50% 50%', transform: 'rotate(-90deg)' }} />
                     </svg>
-                    <span className="cv-ring-val" style={{ color }}>{value}%</span>
+                    <div className="cv-ring-val" style={{ color }}>{value}<span style={{ fontSize: '11px', marginLeft: '1px' }}>%</span></div>
                 </div>
                 <div className="cv-ring-lbl" style={{ color }}>{label}</div>
             </div>
@@ -97,7 +97,7 @@ const PrintableCV = React.forwardRef(({ player }, ref) => {
 
                 {/* Body Content - Side-by-Side Flex */}
                 <div className="cv-body">
-                    {/* Left Column: Bio */}
+                    {/* Left Column: Bio & Info */}
                     <div className="cv-sidebar">
                         <div className="cv-bio-card">
                             <h3 className="cv-section-title" style={{ textAlign: 'center' }}>PLAYER BIO</h3>
@@ -106,6 +106,15 @@ const PrintableCV = React.forwardRef(({ player }, ref) => {
                                 <li><strong>Current Age</strong><span>{player.age} Years</span></li>
                                 <li><strong>Batting Style</strong><span>{player.battingStyle}</span></li>
                                 <li><strong>Bowling Style</strong><span>{player.bowlingStyle}</span></li>
+                            </ul>
+                        </div>
+
+                        <div className="cv-bio-card">
+                            <h3 className="cv-section-title" style={{ textAlign: 'center', color: '#00d2ff' }}>ACADEMY INFO</h3>
+                            <ul className="cv-list">
+                                <li><strong>Primary Role</strong><span>{player.role || 'Player'}</span></li>
+                                <li><strong>Category</strong><span>{player.badges?.[0] || 'Rising Star'}</span></li>
+                                <li><strong>Enrollment Status</strong><span>Active Member</span></li>
                             </ul>
                         </div>
                     </div>
@@ -140,26 +149,6 @@ const PrintableCV = React.forwardRef(({ player }, ref) => {
                                 <StatBox label="STRIKE RATE" value={player.bowlingStats.sr} />
                                 <StatBox label="5 WKTS HAUL" value={player.bowlingStats.fiveW} />
                             </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Academy Endorsement / Empty Space Filler */}
-                <div className="cv-endorsement">
-                    <h3 className="cv-endorsement-title">ACADEMY VERIFICATION</h3>
-                    <p className="cv-endorsement-text">
-                        This document serves as an official performance dossier for <strong>{player.fullName}</strong>.
-                        All statistics and metrics are verified by the DIS Cricket Academy High Performance Unit.
-                        This profile is generated for scouting and professional assessment purposes.
-                    </p>
-                    <div className="cv-signatures">
-                        <div className="cv-sig-block">
-                            <div className="cv-sig-line"></div>
-                            <span>Head Coach</span>
-                        </div>
-                        <div className="cv-sig-block">
-                            <div className="cv-sig-line"></div>
-                            <span>Academy Director</span>
                         </div>
                     </div>
                 </div>
