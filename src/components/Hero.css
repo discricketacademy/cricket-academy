@@ -13,9 +13,10 @@
     inset: 0;
     width: 100%;
     height: 100%;
-    z-index: 0;
-    opacity: 0.25;
-    /* Subtle background effect */
+    z-index: 1;
+    /* Sit above overlays (z0) */
+    opacity: 0.85;
+    /* Highly visible */
     pointer-events: none;
 }
 
@@ -34,9 +35,11 @@
     position: absolute;
     inset: 0;
     background: linear-gradient(135deg,
-            rgba(6, 14, 26, 0.97) 0%,
-            rgba(10, 22, 40, 0.90) 45%,
-            rgba(6, 14, 26, 0.75) 100%);
+            rgba(6, 14, 26, 0.95) 0%,
+            rgba(10, 22, 40, 0.85) 45%,
+            rgba(6, 14, 26, 0.65) 100%);
+    z-index: 0;
+    /* Background layer */
 }
 
 /* Scanline */

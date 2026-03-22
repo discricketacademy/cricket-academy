@@ -115,11 +115,11 @@ const HeroAnimation = () => {
                 left: 0,
                 width: '100%',
                 height: '100%',
-                zIndex: 0,
-                opacity: 0.45, // Increased visibility
+                zIndex: 1, // Sit above base parallax but below container (z2)
+                opacity: 0.85, // Maximum visibility
                 pointerEvents: 'none',
                 objectFit: 'cover',
-                filter: 'brightness(0.9) contrast(1.1)'
+                filter: 'brightness(1.1) contrast(1.1) saturate(1.2)' // Pop the colors
             }}
         />
     );
