@@ -42,20 +42,6 @@ const Navbar = ({ currentView, onNavigate }) => {
         setIsMobileMenuOpen(false);
     };
 
-    const handleDatabaseClick = (e) => {
-        e.preventDefault();
-        onNavigate('all-players');
-        window.scrollTo(0, 0);
-        setIsMobileMenuOpen(false);
-    };
-
-    const navLinks = [
-        { name: 'Home', href: '#home' },
-        { name: 'About', href: '#about' },
-        { name: 'Programs', href: '#programs' },
-        { name: 'Contact', href: '#contact' },
-    ];
-
     const toggleMobileMenu = () => {
         setIsMobileMenuOpen(!isMobileMenuOpen);
     };

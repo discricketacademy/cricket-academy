@@ -1,6 +1,33 @@
 import React from 'react';
 import './PrintableCV.css';
 
+const StatBox = ({ label, value, highlight, accent }) => (
+    <div className={`cv-stat-box ${highlight ? 'cv-highlight' : ''} ${accent ? 'cv-accent-box' : ''}`}>
+        <span className="cv-stat-val">{value}</span>
+        <span className="cv-stat-lbl">{label}</span>
+    </div>
+);
+
+const Ring = ({ value, label, color }) => {
+    const r = 40;
+    const circ = 2 * Math.PI * r;
+    const offset = circ - (circ * value) / 100;
+    return (
+        <div className="cv-ring-container">
+            <div className="cv-ring-svg-wrapper">
+                <svg viewBox="0 0 100 100" className="cv-ring-svg">
+                    <circle cx="50" cy="50" r={r} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="8" />
+                    <circle cx="50" cy="50" r={r} fill="none" stroke={color} strokeWidth="8"
+                        strokeDasharray={circ} strokeDashoffset={offset} strokeLinecap="round"
+                        style={{ transformOrigin: '50% 50%', transform: 'rotate(-90deg)' }} />
+                </svg>
+                <div className="cv-ring-val" style={{ color }}>{value}<span style={{ fontSize: '11px', marginLeft: '1px' }}>%</span></div>
+            </div>
+            <div className="cv-ring-lbl" style={{ color }}>{label}</div>
+        </div>
+    );
+};
+
 const PrintableCV = React.forwardRef(({ player }, ref) => {
     if (!player) return null;
 
@@ -25,33 +52,6 @@ const PrintableCV = React.forwardRef(({ player }, ref) => {
         const d = new Date(typeof player.dob === 'number' ? player.dob : Number(player.dob) || player.dob);
         return isNaN(d) ? player.dob : d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
     })();
-
-    const StatBox = ({ label, value, highlight, accent }) => (
-        <div className={`cv-stat-box ${highlight ? 'cv-highlight' : ''} ${accent ? 'cv-accent-box' : ''}`}>
-            <span className="cv-stat-val">{value}</span>
-            <span className="cv-stat-lbl">{label}</span>
-        </div>
-    );
-
-    const Ring = ({ value, label, color }) => {
-        const r = 40;
-        const circ = 2 * Math.PI * r;
-        const offset = circ - (circ * value) / 100;
-        return (
-            <div className="cv-ring-container">
-                <div className="cv-ring-svg-wrapper">
-                    <svg viewBox="0 0 100 100" className="cv-ring-svg">
-                        <circle cx="50" cy="50" r={r} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="8" />
-                        <circle cx="50" cy="50" r={r} fill="none" stroke={color} strokeWidth="8"
-                            strokeDasharray={circ} strokeDashoffset={offset} strokeLinecap="round"
-                            style={{ transformOrigin: '50% 50%', transform: 'rotate(-90deg)' }} />
-                    </svg>
-                    <div className="cv-ring-val" style={{ color }}>{value}<span style={{ fontSize: '11px', marginLeft: '1px' }}>%</span></div>
-                </div>
-                <div className="cv-ring-lbl" style={{ color }}>{label}</div>
-            </div>
-        );
-    };
 
     return (
         <div className="cv-container" ref={ref}>
