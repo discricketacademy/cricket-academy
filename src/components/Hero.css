@@ -336,7 +336,16 @@
     }
 
     .hero-stats {
-        grid-template-columns: 1fr;
-        gap: 1.25rem;
+        grid-template-columns: repeat(2, 1fr);
+        /* 2x2 grid for horizontal feel */
+        gap: 1.5rem 0.5rem;
+    }
+
+    .hero-stat-value {
+        font-size: 1.5rem;
+    }
+
+    .hero-stat-label {
+        font-size: 0.6rem;
     }
 }
