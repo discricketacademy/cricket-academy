@@ -1,8 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
+import PrintableCV from './PrintableCV';
 import './PlayerProfilePage.css';
+import './FabButton.css';
 
 const PlayerProfilePage = ({ player, onBack }) => {
     const [animate, setAnimate] = useState(false);
+    const [isDownloading, setIsDownloading] = useState(false);
+    const cvRef = useRef(null);
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -84,8 +90,43 @@ const PlayerProfilePage = ({ player, onBack }) => {
         return isNaN(d) ? player.dob : d.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
     })();
 
+    /* ── PDF Download Logic ── */
+    const handleDownloadPDF = async () => {
+        if (!cvRef.current) return;
+        setIsDownloading(true);
+        try {
+            // Give a tiny frame delay to ensure ref is painted if it was lazy
+            await new Promise(resolve => setTimeout(resolve, 50));
+
+            const canvas = await html2canvas(cvRef.current, {
+                scale: 2, // High resolution
+                useCORS: true,
+                backgroundColor: '#0B1F3A',
+                width: 793, // A4 width at 96 DPI
+                height: 1122, // A4 height at 96 DPI
+                windowWidth: 793,
+            });
+            const imgData = canvas.toDataURL('image/jpeg', 0.95);
+            const pdf = new jsPDF({
+                orientation: 'portrait',
+                unit: 'mm',
+                format: 'a4'
+            });
+            pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297);
+            pdf.save(`${player.fullName.replace(/\s+/g, '_')}_Dossier.pdf`);
+        } catch (error) {
+            console.error('PDF Generation Error:', error);
+            alert('Failed to generate PDF. Check console for details.');
+        } finally {
+            setIsDownloading(false);
+        }
+    };
+
     return (
         <div className="prf-page">
+            {/* Hidden Printable A4 CV */}
+            <PrintableCV player={player} ref={cvRef} />
+
             {/* ─── Hero Banner ─── */}
             <div className="prf-hero-banner">
                 <img src={player.imageUrl} alt={player.fullName} className="prf-banner-img" />
@@ -195,6 +236,23 @@ const PlayerProfilePage = ({ player, onBack }) => {
             <footer className="prf-footer">
                 <p>© {new Date().getFullYear()} DIS Cricket Academy · Elite Player Profile System</p>
             </footer>
+
+            {/* Floating Download Popup Button */}
+            <button
+                className={`fab-btn ${isDownloading ? 'downloading' : ''}`}
+                onClick={handleDownloadPDF}
+                disabled={isDownloading}
+                title="Download Player Profile as PDF"
+            >
+                {isDownloading ? (
+                    <span className="fab-icon loader-spinner"></span>
+                ) : (
+                    <>
+                        <svg className="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" /></svg>
+                        <span className="fab-text">Download Player Profile</span>
+                    </>
+                )}
+            </button>
         </div>
     );
 };

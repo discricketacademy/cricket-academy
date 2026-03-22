@@ -1,0 +1,484 @@
+/* PrintableCV.css */
+/* Pro-Level High-End Printable CV Design styling - STRICT 793x1122 A4 FIX */
+
+.cv-container {
+    width: 793px;
+    height: 1122px;
+    position: absolute;
+    left: -9999px;
+    top: -9999px;
+    z-index: -1000;
+    font-family: 'Inter', system-ui, sans-serif;
+    color: #fff;
+    background-color: #0B1F3A;
+    background-image:
+        radial-gradient(circle at top right, rgba(0, 242, 96, 0.08), transparent 500px),
+        radial-gradient(circle at bottom left, rgba(0, 210, 255, 0.08), transparent 500px);
+    overflow: hidden;
+}
+
+/* Giant background watermark */
+.cv-watermark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-30deg);
+    font-size: 200px;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.02);
+    white-space: nowrap;
+    z-index: 0;
+    pointer-events: none;
+    letter-spacing: -5px;
+}
+
+/* Page inner bounds */
+.cv-page {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    padding: 35px 35px 25px 35px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    z-index: 1;
+}
+
+.cv-text-primary {
+    color: #00f260;
+}
+
+.cv-text-accent {
+    color: #ffcc00;
+}
+
+/* Header */
+.cv-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.cv-brand h2 {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 900;
+    letter-spacing: 2px;
+}
+
+.cv-brand p {
+    margin: 2px 0 0;
+    font-size: 11px;
+    color: #8892b0;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+}
+
+.cv-date {
+    font-size: 10px;
+    color: #fff;
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 5px 10px;
+    border-radius: 6px;
+    letter-spacing: 1px;
+}
+
+/* Hero */
+.cv-hero {
+    display: flex;
+    align-items: stretch;
+    gap: 20px;
+    margin-bottom: 20px;
+    background: rgba(0, 0, 0, 0.25);
+    padding: 15px 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cv-hero-image-wrap {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid #00f260;
+    box-shadow: 0 0 20px rgba(0, 242, 96, 0.25);
+    flex-shrink: 0;
+}
+
+.cv-hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+}
+
+.cv-hero-info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.cv-role-chip {
+    align-self: flex-start;
+    padding: 4px 12px;
+    background-color: rgba(0, 242, 96, 0.15);
+    color: #00f260;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    border-radius: 15px;
+    border: 1px solid rgba(0, 242, 96, 0.3);
+    margin-bottom: 8px;
+}
+
+/* User feedback: make name stand out, letters not too close (fixed letter-spacing/bold) */
+.cv-fullname {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+}
+
+.cv-callname {
+    margin: 3px 0 8px;
+    font-size: 14px;
+    color: #00d2ff;
+    font-style: italic;
+    font-weight: 600;
+}
+
+.cv-badges {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+/* User feedback: center align start text */
+.cv-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: linear-gradient(90deg, rgba(255, 204, 0, 0.2), transparent);
+    color: #ffcc00;
+    border-left: 2px solid #ffcc00;
+    padding: 4px 10px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Infographics */
+.cv-infographics-section {
+    margin-bottom: 20px;
+}
+
+.cv-section-title {
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 1.5px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 6px;
+    margin-bottom: 12px;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+.cv-rings-wrapper {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent);
+    border-radius: 10px;
+    padding: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.cv-ring-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+/* User feedback: percentages in rings not perfectly centered */
+.cv-ring-svg-wrapper {
+    position: relative;
+    width: 75px;
+    height: 75px;
+}
+
+.cv-ring-svg {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.cv-ring-val {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 17px;
+    font-weight: 900;
+    z-index: 2;
+    line-height: 1;
+    text-align: center;
+}
+
+.cv-ring-lbl {
+    font-size: 10px;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-align: center;
+}
+
+/* Body - 2 Columns Layout */
+/* Reduced gap so it flows tightly */
+.cv-body {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 20px;
+    flex-grow: 1;
+}
+
+/* Sidebar */
+.cv-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.cv-bio-card {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    padding: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.cv-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.cv-list li {
+    margin-bottom: 12px;
+}
+
+.cv-list li:last-child {
+    margin-bottom: 0;
+}
+
+/* User feedback: center everything */
+.cv-list li strong {
+    display: block;
+    color: #8892b0;
+    font-size: 9px;
+    text-align: center;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    letter-spacing: 1px;
+}
+
+.cv-list li span {
+    font-size: 12px;
+    color: #fff;
+    text-align: center;
+    font-weight: 600;
+    display: block;
+    padding: 6px 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Main Stats Area */
+.cv-main {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.cv-stats-group {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.cv-stats-group h3 {
+    margin: 0 0 12px 0;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-align: center;
+}
+
+.cv-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.cv-stat-box {
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    padding: 10px 6px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.cv-stat-box.cv-highlight {
+    background-color: rgba(0, 242, 96, 0.08);
+    border-color: rgba(0, 242, 96, 0.4);
+}
+
+.cv-accent-box {
+    background-color: rgba(255, 204, 0, 0.08) !important;
+    border-color: rgba(255, 204, 0, 0.4) !important;
+}
+
+.cv-stat-box.cv-highlight .cv-stat-val {
+    color: #00f260;
+}
+
+.cv-accent-box .cv-stat-val {
+    color: #ffcc00;
+}
+
+.cv-stat-val {
+    font-size: 20px;
+    font-weight: 900;
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.cv-stat-lbl {
+    font-size: 9px;
+    color: #8892b0;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+
+/* User feedback: Creative empty space filler */
+.cv-endorsement {
+    background: rgba(0, 242, 96, 0.03);
+    border: 1px solid rgba(0, 242, 96, 0.15);
+    border-radius: 10px;
+    padding: 15px 25px;
+    margin-top: auto;
+    /* Pushes it to the bottom above the footer */
+    margin-bottom: 15px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.cv-endorsement::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: #00f260;
+}
+
+.cv-endorsement-title {
+    font-size: 11px;
+    font-weight: 900;
+    color: #00f260;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin: 0 0 8px 0;
+    display: inline-block;
+    padding-bottom: 4px;
+    border-bottom: 1px dashed rgba(0, 242, 96, 0.3);
+}
+
+.cv-endorsement-text {
+    font-size: 10px;
+    color: #ccd6f6;
+    line-height: 1.6;
+    margin: 0 0 15px 0;
+    font-style: italic;
+    letter-spacing: 0.5px;
+}
+
+.cv-signatures {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding-top: 5px;
+}
+
+.cv-sig-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 130px;
+}
+
+.cv-sig-line {
+    width: 100%;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.2);
+    margin-bottom: 6px;
+}
+
+.cv-sig-block span {
+    font-size: 8px;
+    color: #8892b0;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+
+/* Footer */
+.cv-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cv-footer-text {
+    font-size: 9px;
+    color: #8892b0;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.cv-footer-link {
+    font-size: 9px;
+    color: #00d2ff;
+    font-weight: 700;
+    background: rgba(0, 210, 255, 0.1);
+    padding: 4px 8px;
+    border-radius: 4px;
+}

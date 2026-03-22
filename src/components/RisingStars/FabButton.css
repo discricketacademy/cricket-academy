@@ -1,0 +1,80 @@
+/* FabButton.css */
+.fab-btn {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    background: #00f260;
+    color: #0B1F3A;
+    border: none;
+    border-radius: 50px;
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 800;
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(0, 242, 96, 0.4);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 1000;
+}
+
+.fab-btn:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 15px 40px rgba(0, 242, 96, 0.6);
+    background: #ffcc00;
+    color: #0B1F3A;
+}
+
+.fab-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.fab-text {
+    line-height: 1;
+}
+
+.fab-btn.downloading {
+    opacity: 0.8;
+    pointer-events: none;
+    animation: fab-pulse 1.5s infinite;
+}
+
+.loader-spinner {
+    border: 3px solid rgba(11, 31, 58, 0.3);
+    border-top: 3px solid #0B1F3A;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    animation: fab-spin 1s linear infinite;
+}
+
+@keyframes fab-pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(0, 242, 96, 0.7);
+    }
+
+    70% {
+        transform: scale(0.98);
+        box-shadow: 0 0 0 15px rgba(0, 242, 96, 0);
+    }
+
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(0, 242, 96, 0);
+    }
+}
+
+@keyframes fab-spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
