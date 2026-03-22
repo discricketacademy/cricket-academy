@@ -38,24 +38,33 @@ const HeroAnimation = () => {
         const canvas = canvasRef.current;
         const context = canvas.getContext('2d');
 
+        let targetFrame = 0;
+        let currentFrame = 0;
+        const lerpSpeed = 0.08; // Smoothing factor (0 to 1)
+
         const renderFrame = (index) => {
-            if (images[index]) {
-                const img = images[index];
+            const frame = Math.round(index);
+            if (images[frame]) {
+                const img = images[frame];
                 const canvasAspectRatio = canvas.width / canvas.height;
                 const imageAspectRatio = img.width / img.height;
 
                 let drawWidth, drawHeight, offsetX, offsetY;
 
+                // Creative: Add a slight zoom based on scroll progress
+                const scrollFactor = index / (frameCount - 1);
+                const zoom = 1 + (scrollFactor * 0.05); // Subtle 5% zoom
+
                 if (canvasAspectRatio > imageAspectRatio) {
-                    drawWidth = canvas.width;
-                    drawHeight = canvas.width / imageAspectRatio;
-                    offsetX = 0;
+                    drawWidth = canvas.width * zoom;
+                    drawHeight = (canvas.width / imageAspectRatio) * zoom;
+                    offsetX = (canvas.width - drawWidth) / 2;
                     offsetY = (canvas.height - drawHeight) / 2;
                 } else {
-                    drawWidth = canvas.height * imageAspectRatio;
-                    drawHeight = canvas.height;
+                    drawWidth = (canvas.height * imageAspectRatio) * zoom;
+                    drawHeight = canvas.height * zoom;
                     offsetX = (canvas.width - drawWidth) / 2;
-                    offsetY = 0;
+                    offsetY = (canvas.height - drawHeight) / 2;
                 }
 
                 context.clearRect(0, 0, canvas.width, canvas.height);
@@ -63,28 +72,36 @@ const HeroAnimation = () => {
             }
         };
 
+        const animationLoop = () => {
+            // Smoothly interpolate towards target frame
+            currentFrame += (targetFrame - currentFrame) * lerpSpeed;
+            renderFrame(currentFrame);
+            requestAnimationFrame(animationLoop);
+        };
+
         const handleScroll = () => {
             const scrollTop = window.scrollY;
-            const maxScroll = 1200; // The scroll distance over which the animation plays
+            const maxScroll = 700; // Animation plays faster
             const scrollFraction = Math.min(scrollTop / maxScroll, 1);
-            const frameIndex = Math.floor(scrollFraction * (frameCount - 1));
-
-            requestAnimationFrame(() => renderFrame(frameIndex));
+            targetFrame = scrollFraction * (frameCount - 1);
         };
 
         const handleResize = () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            handleScroll(); // Redraw on resize
+            handleScroll();
         };
 
         window.addEventListener('scroll', handleScroll);
         window.addEventListener('resize', handleResize);
-        handleResize(); // Initial setup
+        handleResize();
+
+        const animationId = requestAnimationFrame(animationLoop);
 
         return () => {
             window.removeEventListener('scroll', handleScroll);
             window.removeEventListener('resize', handleResize);
+            cancelAnimationFrame(animationId);
         };
     }, [images]);
 
@@ -99,9 +116,10 @@ const HeroAnimation = () => {
                 width: '100%',
                 height: '100%',
                 zIndex: 0,
-                opacity: 0.4, // Make it subtle so it doesn't obstruct text
+                opacity: 0.45, // Increased visibility
                 pointerEvents: 'none',
-                objectFit: 'cover'
+                objectFit: 'cover',
+                filter: 'brightness(0.9) contrast(1.1)'
             }}
         />
     );
