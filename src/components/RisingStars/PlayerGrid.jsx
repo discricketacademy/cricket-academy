@@ -27,7 +27,7 @@ const PlayerGrid = ({ onSelectPlayer }) => {
         <section id="rising-stars" className="section dashboard-section" style={{ paddingTop: '2rem' }}>
             <div className="container">
                 <div className="section-label">ALL PLAYERS</div>
-                <h2 className="section-title animate-fadeInUp">ACADEMY <span className="text-accent">ROSTER</span></h2>
+                <h2 className="section-title reveal delay-1">ACADEMY <span className="text-accent">ROSTER</span></h2>
 
                 <div className="filter-tabs justify-center mb-5">
                     {['All', 'Batsman', 'Bowler', 'All-rounder'].map(f => (
@@ -52,8 +52,8 @@ const PlayerGrid = ({ onSelectPlayer }) => {
                             return (
                                 <div
                                     key={player.id}
-                                    className="roster-card animate-fadeInUp"
-                                    style={{ animationDelay: `${Math.min(idx * 0.07, 0.5)}s` }}
+                                    className="roster-card reveal"
+                                    style={{ transitionDelay: `${Math.min(idx * 0.05, 0.4)}s` }}
                                     onClick={() => onSelectPlayer(player)}
                                 >
                                     <div className="card-image-bg">

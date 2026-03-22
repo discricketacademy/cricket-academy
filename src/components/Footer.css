@@ -8,12 +8,22 @@
 .footer-top-glow {
     position: absolute;
     top: -1px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 300px;
+    left: 0;
+    width: 100%;
     height: 2px;
     background: linear-gradient(90deg, transparent, var(--primary-color), var(--accent-color), var(--primary-color), transparent);
-    border-radius: var(--radius-full);
+    background-size: 200% 100%;
+    animation: flowLine 5s linear infinite;
+}
+
+@keyframes flowLine {
+    0% {
+        background-position: 100% 0;
+    }
+
+    100% {
+        background-position: -100% 0;
+    }
 }
 
 .footer-grid {
@@ -70,11 +80,28 @@
     font-size: 0.9rem;
     color: var(--text-muted);
     transition: color var(--transition-fast), transform var(--transition-fast);
+    position: relative;
+}
+
+.footer-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 15px;
+    /* offset the dot */
+    width: 0;
+    height: 1px;
+    background: var(--primary-color);
+    transition: width 0.3s ease;
 }
 
 .footer-links a:hover {
     color: white;
     transform: translateX(4px);
+}
+
+.footer-links a:hover::after {
+    width: calc(100% - 15px);
 }
 
 .footer-link-dot {

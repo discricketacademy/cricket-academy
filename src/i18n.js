@@ -9,11 +9,11 @@ export const translations = {
             "🌟 Pathway to Club Cricket"
         ],
         sections: {
-            playerInfo: "📋 1️⃣ PLAYER INFORMATION",
-            parentDetails: "👨‍👩‍👦 2️⃣ PARENT / GUARDIAN DETAILS",
-            medicalInfo: "🏥 3️⃣ MEDICAL INFORMATION",
-            agreements: "⚠️ 4️⃣ AGREEMENTS",
-            signature: "✍️ 5️⃣ SIGNATURE"
+            playerInfo: "PLAYER INFORMATION",
+            parentDetails: "PARENT / GUARDIAN DETAILS",
+            medicalInfo: "MEDICAL INFORMATION",
+            agreements: "AGREEMENTS",
+            signature: "SIGNATURE"
         },
         fields: {
             fullName: "Full Name",
@@ -62,11 +62,11 @@ export const translations = {
             "🌟 ක්‍රීඩා සමාජ ක්‍රිකට් සඳහා මග පෙන්වීම"
         ],
         sections: {
-            playerInfo: "📋 1️⃣ ක්‍රීඩකයාගේ තොරතුරු",
-            parentDetails: "👨‍👩‍👦 2️⃣ දෙමාපිය / භාරකරුගේ විස්තර",
-            medicalInfo: "🏥 3️⃣ වෛද්‍ය තොරතුරු",
-            agreements: "⚠️ 4️⃣ ගිවිසුම්",
-            signature: "✍️ 5️⃣ අත්සන"
+            playerInfo: "ක්‍රීඩකයාගේ තොරතුරු",
+            parentDetails: "දෙමාපිය / භාරකරුගේ විස්තර",
+            medicalInfo: "වෛද්‍ය තොරතුරු",
+            agreements: "ගිවිසුම්",
+            signature: "අත්සන"
         },
         fields: {
             fullName: "සම්පූර්ණ නම",

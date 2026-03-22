@@ -5,6 +5,17 @@ import { submitRegistration } from '../../services/registrationService';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
+const SectionIcon = ({ type }) => {
+    switch (type) {
+        case 'playerInfo': return <svg className="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>;
+        case 'parentDetails': return <svg className="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>;
+        case 'medicalInfo': return <svg className="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2" /></svg>;
+        case 'agreements': return <svg className="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /><line x1="10" y1="9" x2="8" y2="9" /></svg>;
+        case 'signature': return <svg className="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 20h9" /><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" /></svg>;
+        default: return null;
+    }
+};
+
 const RegisterPage = ({ onAdminUnlock }) => {
     const [lang, setLang] = useState('en'); // 'en' or 'si'
     const [formData, setFormData] = useState({
@@ -176,6 +187,10 @@ const RegisterPage = ({ onAdminUnlock }) => {
 
     return (
         <div className="register-wrapper">
+            {/* Ambient Background Glows */}
+            <div className="register-bg-glow glow-top" />
+            <div className="register-bg-glow glow-bottom" />
+
             {/* Professional Template for PDF Generation */}
             <div style={{ position: 'absolute', left: '-9999px', top: '-9999px' }}>
                 <div ref={pdfRef} className="pdf-template">
@@ -280,12 +295,15 @@ const RegisterPage = ({ onAdminUnlock }) => {
                         </ul>
                     </div>
 
-                    <div className="register-form-card animate-fadeInUp">
+                    <div className="register-form-card reveal">
                         <form onSubmit={handleSubmit} className="register-form">
 
                             {/* SECTION 1: PLAYER INFO */}
-                            <div className="form-section">
-                                <h3 className="section-title">{t('sections.playerInfo')}</h3>
+                            <div className="form-section glass-panel reveal delay-1">
+                                <h3 className="section-title">
+                                    <SectionIcon type="playerInfo" />
+                                    <span>{t('sections.playerInfo')}</span>
+                                </h3>
                                 <div className="form-group">
                                     <label>{t('fields.fullName')} *</label>
                                     <input type="text" name="fullName" required value={formData.fullName} onChange={handleChange} placeholder={t('placeholders.fullName')} />
@@ -307,8 +325,11 @@ const RegisterPage = ({ onAdminUnlock }) => {
                             </div>
 
                             {/* SECTION 2: PARENT DETAILS */}
-                            <div className="form-section">
-                                <h3 className="section-title">{t('sections.parentDetails')}</h3>
+                            <div className="form-section glass-panel reveal delay-2">
+                                <h3 className="section-title">
+                                    <SectionIcon type="parentDetails" />
+                                    <span>{t('sections.parentDetails')}</span>
+                                </h3>
                                 <div className="form-group">
                                     <label>{t('fields.parentName')} *</label>
                                     <input type="text" name="parentName" required value={formData.parentName} onChange={handleChange} placeholder={t('placeholders.parentName')} />
@@ -347,8 +368,11 @@ const RegisterPage = ({ onAdminUnlock }) => {
                             </div>
 
                             {/* SECTION 3: MEDICAL */}
-                            <div className="form-section">
-                                <h3 className="section-title">{t('sections.medicalInfo')}</h3>
+                            <div className="form-section glass-panel reveal delay-3">
+                                <h3 className="section-title">
+                                    <SectionIcon type="medicalInfo" />
+                                    <span>{t('sections.medicalInfo')}</span>
+                                </h3>
                                 <div className="form-group">
                                     <label>{t('fields.medicalConditions')}</label>
                                     <textarea name="medicalConditions" value={formData.medicalConditions} onChange={handleChange} placeholder={t('placeholders.medical')} rows="3" />
@@ -356,8 +380,11 @@ const RegisterPage = ({ onAdminUnlock }) => {
                             </div>
 
                             {/* SECTION 4: AGREEMENTS */}
-                            <div className="form-section">
-                                <h3 className="section-title">{t('sections.agreements')}</h3>
+                            <div className="form-section glass-panel reveal delay-4">
+                                <h3 className="section-title">
+                                    <SectionIcon type="agreements" />
+                                    <span>{t('sections.agreements')}</span>
+                                </h3>
                                 <div className="form-group checkbox-group">
                                     <label className="checkbox-label">
                                         <input type="checkbox" name="rulesAgreement" required checked={formData.rulesAgreement} onChange={handleChange} />
@@ -373,8 +400,11 @@ const RegisterPage = ({ onAdminUnlock }) => {
                             </div>
 
                             {/* SECTION 5: SIGNATURE */}
-                            <div className="form-section">
-                                <h3 className="section-title">{t('sections.signature')}</h3>
+                            <div className="form-section glass-panel reveal delay-5">
+                                <h3 className="section-title">
+                                    <SectionIcon type="signature" />
+                                    <span>{t('sections.signature')}</span>
+                                </h3>
                                 <div className="form-group">
                                     <label>{t('fields.signatureName')} *</label>
                                     <input type="text" name="signatureName" required value={formData.signatureName} onChange={handleChange} placeholder={t('placeholders.parentName')} />

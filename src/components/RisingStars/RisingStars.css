@@ -69,12 +69,14 @@
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    transform-style: preserve-3d;
 }
 
 .roster-card:hover {
-    transform: translateY(-10px) scale(1.02);
+    transform: perspective(1000px) translateY(-10px) scale(1.02) rotateX(3deg) rotateY(-2deg);
     border-color: var(--primary-color);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 30px var(--primary-glow);
+    z-index: 2;
 }
 
 .card-image-bg {

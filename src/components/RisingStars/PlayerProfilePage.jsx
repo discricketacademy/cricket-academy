@@ -149,7 +149,7 @@ const PlayerProfilePage = ({ player, onBack }) => {
 
             <div className="container prf-body">
                 <div className="prf-left-col">
-                    <div className="prf-card glass-card">
+                    <div className="prf-card glass-card reveal delay-1">
                         <h3 className="prf-card-title">PLAYER INFO</h3>
                         <div className="prf-info-grid">
                             {[
@@ -166,7 +166,7 @@ const PlayerProfilePage = ({ player, onBack }) => {
                         </div>
                     </div>
 
-                    <div className="prf-card glass-card">
+                    <div className="prf-card glass-card reveal delay-2">
                         <h3 className="prf-card-title">PERFORMANCE RATING</h3>
                         <div className="prf-rings-row">
                             <Ring value={form} label="Form" animate={animate} color="var(--primary-color)" />
@@ -177,7 +177,7 @@ const PlayerProfilePage = ({ player, onBack }) => {
                 </div>
 
                 <div className="prf-right-col">
-                    <div className="prf-card glass-card">
+                    <div className="prf-card glass-card reveal delay-3">
                         <h3 className="prf-card-title text-primary">BATTING & FIELDING</h3>
                         <div className="prf-data-grid">
                             <DataBox val={player.battingStats?.mat} lbl="MAT" />
@@ -197,7 +197,7 @@ const PlayerProfilePage = ({ player, onBack }) => {
                         </div>
                     </div>
 
-                    <div className="prf-card glass-card">
+                    <div className="prf-card glass-card reveal delay-4">
                         <h3 className="prf-card-title text-accent">BOWLING</h3>
                         <div className="prf-data-grid">
                             <DataBox val={player.bowlingStats?.mat} lbl="MAT" />
