@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Road Aligner Alpha – Senaro Avurudu Game</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f172a;
+            --sidebar-bg: #1e293b;
+            --accent: #fbbf24;
+            --accent-glow: rgba(251, 191, 36, 0.4);
+            --text: #f8fafc;
+            --panel: #334155;
+            --border: #475569;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Outfit', sans-serif;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- Sidebar --- */
+        #sidebar {
+            width: 320px;
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.3);
+            z-index: 50;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 900;
+            margin: 0;
+            color: var(--accent);
+            text-transform: uppercase;
+        }
+
+        .subtitle {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            background-color: var(--accent);
+            color: #1e293b;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            transform: scale(1.02);
+            background: #fcd34d;
+        }
+
+        .btn.secondary {
+            background: var(--panel);
+            color: white;
+        }
+
+        .btn.active {
+            background: #22c55e;
+            color: white;
+            box-shadow: 0 0 15px rgba(34, 197, 94, 0.4);
+        }
+
+        .asset-group {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 5px;
+            margin-top: 10px;
+        }
+
+        .asset-card {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 10px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: 0.2s;
+        }
+
+        .asset-card:hover {
+            border-color: var(--accent);
+        }
+
+        .asset-card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            margin-bottom: 5px;
+            background: #475569;
+        }
+
+        .asset-card span {
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        /* --- Workspace --- */
+        #workspace-container {
+            flex: 1;
+            position: relative;
+            overflow: auto;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        #canvas {
+            position: absolute;
+            background: #1e293b;
+            min-width: 55000px;
+            min-height: 4000px;
+            top: 0;
+            left: 0;
+        }
+
+        #canvas.path-mode .road-block {
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        #path-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .road-block {
+            position: absolute;
+            user-select: none;
+            cursor: grab;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+            pointer-events: auto;
+        }
+
+        .road-block.selected {
+            outline: 2px solid var(--accent);
+            outline-offset: 4px;
+            z-index: 10;
+        }
+
+        .connector {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 15;
+            pointer-events: none;
+        }
+
+        .start-point {
+            background: #22c55e;
+        }
+
+        .end-point {
+            background: #ef4444;
+        }
+
+        .mode-indicator {
+            position: fixed;
+            top: 20px;
+            left: 340px;
+            background: var(--sidebar-bg);
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid var(--accent);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .dot.block {
+            background: var(--accent);
+        }
+
+        .dot.path {
+            background: #22c55e;
+        }
+
+        #controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        #export-panel {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 700px;
+            background: var(--sidebar-bg);
+            border: 2px solid var(--accent);
+            border-radius: 20px;
+            padding: 25px;
+            z-index: 2000;
+            box-shadow: 0 0 100px rgba(0, 0, 0, 0.9);
+        }
+
+        #exportText {
+            width: 100%;
+            height: 350px;
+            background: #0f172a;
+            color: #22c55e;
+            font-family: monospace;
+            padding: 10px;
+            margin: 15px 0;
+            border: 1px solid var(--border);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            cursor: pointer;
+            font-size: 24px;
+        }
+
+        .hint {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            pointer-events: none;
+            z-index: 100;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="sidebar">
+        <h1>Road Aligner</h1>
+        <p class="subtitle">Visual Level Editor Alpha</p>
+
+        <div style="display: flex; gap: 8px; margin-bottom: 20px;">
+            <button id="btnBlockMode" class="btn active" onclick="setMode('block')" style="flex:1">Blocks</button>
+            <button id="btnPathMode" class="btn secondary" onclick="setMode('path')" style="flex:1">Path</button>
+        </div>
+
+        <div id="blockControls">
+            <div class="asset-group" id="assetList"></div>
+        </div>
+
+        <div id="pathControls" style="display:none;">
+            <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 15px;">Drawing dots defines the physical
+                collision surface. Click exactly on the road top.</p>
+            <button class="btn secondary" style="width:100%; margin-bottom:10px" onclick="undoPath()">Undo Point
+                ↩️</button>
+            <button class="btn secondary" style="width:100%" onclick="clearPath()">Clear Path 🗑️</button>
+        </div>
+
+        <div
+            style="margin-top:auto; font-size: 0.8rem; color: #64748b; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px;">
+            <p style="margin:2px 0">• Green = Start point</p>
+            <p style="margin:2px 0">• Red = End point</p>
+            <p style="margin:2px 0">• Drag to move blocks</p>
+            <p style="margin:2px 0">• Delete key to remove</p>
+        </div>
+    </div>
+
+    <div id="workspace-container">
+        <div id="canvas">
+            <canvas id="path-canvas"></canvas>
+        </div>
+    </div>
+
+    <div class="mode-indicator" id="modeIndicator">
+        <div class="dot block"></div>
+        <span>Block Mode: Editing Layout</span>
+    </div>
+
+    <div class="hint">Scroll or Drag Empty Area to Pan</div>
+
+    <div id="controls">
+        <button class="btn secondary" onclick="clearAll()">Clear All</button>
+        <button class="btn" onclick="openExport()">Export Data 📋</button>
+    </div>
+
+    <div id="export-panel">
+        <span class="close-btn" onclick="closeExport()">&times;</span>
+        <h2>Export Level Configuration</h2>
+        <p style="font-size: 0.9rem; color: #94a3b8;">Copy this JSON and send it back to Antigravity.</p>
+        <textarea id="exportText" readonly></textarea>
+        <button class="btn" style="width:100%" onclick="copyExport()">Copy to Clipboard</button>
+    </div>
+
+    <script>
+        const ASSETS_BASE = 'assets/';
+        const BLOCK_SCALE = 0.45;
+        const BLOCK_DEFS = {
+            flat: { asset: 'road/Flat Road.png', w: 1837, h: 234, sY: 68, eY: 68, label: 'Flat Road' },
+            up: { asset: 'road/Uphill Ramp.png', w: 1775, h: 379, sY: 185, eY: 80, label: 'Uphill Ramp' },
+            down: { asset: 'road/Downhill Ramp.png', w: 1778, h: 375, sY: 80, eY: 185, label: 'Downhill Ramp' },
+            bump: { asset: 'road/Rounded Bump.png', w: 1704, h: 309, sY: 153, eY: 153, label: 'Rounded Bump' }
+        };
+
+        const INITIAL_TRACK = [
+            { "type": "flat", "x": 8116, "y": 564 },
+            { "type": "up", "x": 8940, "y": 500 },
+            { "type": "bump", "x": 9700, "y": 450 },
+            { "type": "down", "x": 10450, "y": 520 },
+            { "type": "flat", "x": 11200, "y": 580 },
+            { "type": "up", "x": 12000, "y": 510 },
+            { "type": "up", "x": 12800, "y": 440 },
+            { "type": "flat", "x": 13600, "y": 440 },
+            { "type": "down", "x": 14400, "y": 510 },
+            { "type": "bump", "x": 15200, "y": 480 },
+            { "type": "flat", "x": 16000, "y": 480 },
+            { "type": "up", "x": 16800, "y": 410 },
+            { "type": "down", "x": 17600, "y": 480 },
+            { "type": "flat", "x": 18400, "y": 480 },
+            { "type": "bump", "x": 19200, "y": 430 },
+            { "type": "up", "x": 20000, "y": 380 },
+            { "type": "down", "x": 20800, "y": 450 },
+            { "type": "flat", "x": 21600, "y": 450 },
+            { "type": "up", "x": 22400, "y": 380 },
+            { "type": "bump", "x": 23200, "y": 330 },
+            { "type": "down", "x": 24000, "y": 400 },
+            { "type": "flat", "x": 24800, "y": 400 },
+            { "type": "up", "x": 25600, "y": 330 },
+            { "type": "up", "x": 26400, "y": 260 },
+            { "type": "flat", "x": 27200, "y": 260 },
+            { "type": "down", "x": 28000, "y": 330 },
+            { "type": "bump", "x": 28800, "y": 300 },
+            { "type": "flat", "x": 29600, "y": 300 },
+            { "type": "up", "x": 30400, "y": 230 },
+            { "type": "down", "x": 31200, "y": 300 },
+            { "type": "flat", "x": 32000, "y": 300 },
+            { "type": "bump", "x": 32800, "y": 250 },
+            { "type": "up", "x": 33600, "y": 200 },
+            { "type": "down", "x": 34400, "y": 270 },
+            { "type": "flat", "x": 35200, "y": 270 },
+            { "type": "up", "x": 36000, "y": 200 },
+            { "type": "bump", "x": 36800, "y": 150 },
+            { "type": "down", "x": 37600, "y": 220 },
+            { "type": "flat", "x": 38400, "y": 220 },
+            { "type": "up", "x": 39200, "y": 150 },
+            { "type": "up", "x": 40000, "y": 80 },
+            { "type": "flat", "x": 40800, "y": 80 },
+            { "type": "down", "x": 41600, "y": 150 },
+            { "type": "bump", "x": 42400, "y": 120 },
+            { "type": "flat", "x": 43200, "y": 120 },
+            { "type": "up", "x": 44000, "y": 50 },
+            { "type": "down", "x": 44800, "y": 120 },
+            { "type": "flat", "x": 45600, "y": 120 },
+            { "type": "bump", "x": 46400, "y": 70 },
+            { "type": "up", "x": 47200, "y": 20 },
+            { "type": "down", "x": 48000, "y": 90 },
+            { "type": "flat", "x": 48800, "y": 90 },
+            { "type": "flat", "x": 49600, "y": 90 },
+            { "type": "flat", "x": 50400, "y": 90 },
+            { "type": "flat", "x": 51200, "y": 90 }
+        ];
+
+        const canvas = document.getElementById('canvas');
+        const workspace = document.getElementById('workspace-container');
+        const assetList = document.getElementById('assetList');
+        const pathCanvas = document.getElementById('path-canvas');
+        const pathCtx = pathCanvas.getContext('2d');
+
+        let placedBlocks = [];
+        let pathPoints = [
+            { "x": 609, "y": 765 }, { "x": 739, "y": 764 }, { "x": 848, "y": 768 }, { "x": 938, "y": 783 },
+            { "x": 1011, "y": 803 }, { "x": 1084, "y": 820 }, { "x": 1201, "y": 838 }, { "x": 1315, "y": 841 },
+            { "x": 1414, "y": 839 }, { "x": 1414, "y": 838 }, { "x": 1637, "y": 839 }, { "x": 1861, "y": 840 },
+            { "x": 1861, "y": 840 }, { "x": 2169, "y": 840 }, { "x": 2299, "y": 839 }, { "x": 2394, "y": 833 },
+            { "x": 2477, "y": 820 }, { "x": 2478, "y": 821 }, { "x": 2572, "y": 795 }, { "x": 2663, "y": 774 },
+            { "x": 2763, "y": 762 }, { "x": 2879, "y": 762 }, { "x": 2947, "y": 762 }, { "x": 3027, "y": 758 },
+            { "x": 3111, "y": 741 }, { "x": 3200, "y": 710 }, { "x": 3253, "y": 696 }, { "x": 3325, "y": 689 },
+            { "x": 3386, "y": 702 }, { "x": 3442, "y": 722 }, { "x": 3544, "y": 753 }, { "x": 3618, "y": 762 },
+            { "x": 3705, "y": 764 }, { "x": 3800, "y": 764 }, { "x": 3886, "y": 765 }, { "x": 3968, "y": 779 },
+            { "x": 4042, "y": 797 }, { "x": 4102, "y": 811 }, { "x": 4104, "y": 811 }, { "x": 4209, "y": 832 },
+            { "x": 4304, "y": 839 }, { "x": 4378, "y": 840 }, { "x": 4476, "y": 841 }, { "x": 4576, "y": 835 },
+            { "x": 4648, "y": 826 }, { "x": 4739, "y": 803 }, { "x": 4811, "y": 784 }, { "x": 4880, "y": 768 },
+            { "x": 4938, "y": 764 }, { "x": 5006, "y": 762 }, { "x": 5044, "y": 760 }, { "x": 5180, "y": 763 },
+            { "x": 5408, "y": 762 }, { "x": 5653, "y": 761 }, { "x": 5861, "y": 762 }, { "x": 5942, "y": 761 },
+            { "x": 6072, "y": 759 }, { "x": 6188, "y": 746 }, { "x": 6268, "y": 727 }, { "x": 6373, "y": 699 },
+            { "x": 6444, "y": 687 }, { "x": 6522, "y": 683 }, { "x": 6592, "y": 682 }, { "x": 6667, "y": 684 },
+            { "x": 6771, "y": 680 }, { "x": 6850, "y": 660 }, { "x": 6944, "y": 626 }, { "x": 7031, "y": 609 },
+            { "x": 7090, "y": 616 }, { "x": 7157, "y": 637 }, { "x": 7235, "y": 664 }, { "x": 7285, "y": 676 },
+            { "x": 7334, "y": 682 }, { "x": 7384, "y": 684 }, { "x": 7463, "y": 684 }, { "x": 7539, "y": 680 },
+            { "x": 7634, "y": 675 }, { "x": 7726, "y": 656 }, { "x": 7810, "y": 634 }, { "x": 7882, "y": 616 },
+            { "x": 7945, "y": 606 }, { "x": 8050, "y": 603 }, { "x": 8128, "y": 604 }, { "x": 8281, "y": 604 },
+            { "x": 8458, "y": 602 }, { "x": 8722, "y": 602 }, { "x": 8857, "y": 604 }, { "x": 8934, "y": 602 }
+        ];
+        let selectedBlock = null;
+        let draggingBlock = null;
+        let dragOffX = 0, dragOffY = 0;
+        let isPanning = false, panStartX, panStartY, scLeft, scTop;
+        let mode = 'block';
+
+        window.onload = () => {
+            console.log("Initializing Aligner...");
+            for (const [key, d] of Object.entries(BLOCK_DEFS)) {
+                const card = document.createElement('div');
+                card.className = 'asset-card';
+                card.draggable = true;
+                card.onclick = () => { if (mode === 'block') addBlock(key); };
+                card.ondragstart = (e) => { e.dataTransfer.setData('type', key); };
+                card.innerHTML = `<img src="${ASSETS_BASE + d.asset}" draggable="false"><span>${d.label}</span>`;
+                assetList.appendChild(card);
+            }
+
+            INITIAL_TRACK.forEach(b => addBlock(b.type, b.x, b.y));
+
+            pathCanvas.width = 55000;
+            pathCanvas.height = 4000;
+            drawPathLine();
+
+            workspace.scrollLeft = 0;
+            workspace.scrollTop = 1500;
+            console.log("Initialization Done.");
+        };
+
+        function setMode(m) {
+            mode = m;
+            document.getElementById('btnBlockMode').className = 'btn ' + (m === 'block' ? 'active' : 'secondary');
+            document.getElementById('btnPathMode').className = 'btn ' + (m === 'path' ? 'active' : 'secondary');
+            document.getElementById('blockControls').style.display = m === 'block' ? 'block' : 'none';
+            document.getElementById('pathControls').style.display = m === 'path' ? 'block' : 'none';
+
+            const ind = document.getElementById('modeIndicator');
+            ind.querySelector('.dot').className = 'dot ' + m;
+            ind.querySelector('span').innerText = m === 'block' ? 'Block Mode: Editing Layout' : 'Path Mode: Drawing Collision Line';
+
+            workspace.style.cursor = m === 'block' ? 'grab' : 'crosshair';
+            canvas.className = (m === 'path' ? 'path-mode' : '');
+            if (m === 'path') selectBlock(null);
+        }
+
+        workspace.ondragover = (e) => e.preventDefault();
+        workspace.ondrop = (e) => {
+            e.preventDefault();
+            if (mode !== 'block') return;
+            const type = e.dataTransfer.getData('type');
+            if (type) {
+                const r = canvas.getBoundingClientRect();
+                addBlock(type, (e.clientX - r.left), (e.clientY - r.top));
+            }
+        };
+
+        function addBlock(type, x, y) {
+            const def = BLOCK_DEFS[type];
+            if (x === undefined) {
+                if (placedBlocks.length > 0) {
+                    const last = placedBlocks[placedBlocks.length - 1];
+                    const lastEnd = last.getEndPoint();
+                    x = lastEnd.x; y = lastEnd.y - def.sY * BLOCK_SCALE;
+                } else { x = 400; y = 1800; }
+            }
+
+            const id = 'block_' + Date.now() + Math.random();
+            const el = document.createElement('div');
+            el.id = id; el.className = 'road-block';
+            el.style.width = (def.w * BLOCK_SCALE) + 'px';
+            el.style.height = (def.h * BLOCK_SCALE) + 'px';
+            el.style.left = x + 'px'; el.style.top = y + 'px';
+
+            el.innerHTML = `
+                <img src="${ASSETS_BASE + def.asset}" style="width:100%; height:100%" draggable="false">
+                <div class="connector start-point" style="left:0; top:${def.sY * BLOCK_SCALE}px"></div>
+                <div class="connector end-point" style="left:100%; top:${def.eY * BLOCK_SCALE}px"></div>
+            `;
+
+            canvas.appendChild(el);
+            const block = {
+                id, type, el, x, y,
+                getStartPoint: () => ({ x: block.x, y: block.y + def.sY * BLOCK_SCALE }),
+                getEndPoint: () => ({ x: block.x + def.w * BLOCK_SCALE, y: block.y + def.eY * BLOCK_SCALE })
+            };
+            placedBlocks.push(block);
+
+            el.onmousedown = (e) => {
+                if (mode !== 'block' || e.button !== 0) return;
+                draggingBlock = block; selectBlock(block);
+                dragOffX = e.clientX - block.x; dragOffY = e.clientY - block.y;
+                e.stopPropagation();
+            };
+            return block;
+        }
+
+        window.addEventListener('mousemove', (e) => {
+            if (draggingBlock) {
+                draggingBlock.x = e.clientX - dragOffX; draggingBlock.y = e.clientY - dragOffY;
+                placedBlocks.forEach(other => {
+                    if (other.id === draggingBlock.id) return;
+                    const otherEnd = other.getEndPoint();
+                    const currentStartLoc = { x: draggingBlock.x, y: draggingBlock.y + BLOCK_DEFS[draggingBlock.type].sY * BLOCK_SCALE };
+                    if (Math.hypot(otherEnd.x - currentStartLoc.x, otherEnd.y - currentStartLoc.y) < 20) {
+                        draggingBlock.x = otherEnd.x; draggingBlock.y = otherEnd.y - BLOCK_DEFS[draggingBlock.type].sY * BLOCK_SCALE;
+                    }
+                });
+                draggingBlock.el.style.left = draggingBlock.x + 'px'; draggingBlock.el.style.top = draggingBlock.y + 'px';
+            } else if (isPanning) {
+                workspace.scrollLeft = scLeft - (e.clientX - panStartX);
+                workspace.scrollTop = scTop - (e.clientY - panStartY);
+            }
+        });
+
+        window.addEventListener('mouseup', () => { draggingBlock = null; isPanning = false; });
+
+        workspace.onmousedown = (e) => {
+            if (e.button === 0) {
+                if (mode === 'block') {
+                    if (e.target === workspace || e.target === canvas) {
+                        isPanning = true; panStartX = e.clientX; panStartY = e.clientY;
+                        scLeft = workspace.scrollLeft; scTop = workspace.scrollTop;
+                    }
+                } else {
+                    const r = canvas.getBoundingClientRect();
+                    pathPoints.push({ x: Math.round(e.clientX - r.left), y: Math.round(e.clientY - r.top) });
+                    pathPoints.sort((a, b) => a.x - b.x);
+                    drawPathLine();
+                }
+            }
+        };
+
+        function drawPathLine() {
+            pathCtx.clearRect(0, 0, pathCanvas.width, pathCanvas.height);
+            if (pathPoints.length < 2) {
+                // Just draw the single dot if only one point
+                if (pathPoints.length === 1) {
+                    pathCtx.fillStyle = '#22c55e';
+                    pathCtx.beginPath();
+                    pathCtx.arc(pathPoints[0].x, pathPoints[0].y, 6, 0, Math.PI * 2);
+                    pathCtx.fill();
+                }
+                return;
+            }
+
+            // 1. Draw the continuous line
+            pathCtx.strokeStyle = '#22c55e';
+            pathCtx.lineWidth = 10;
+            pathCtx.lineCap = 'round';
+            pathCtx.lineJoin = 'round';
+            pathCtx.beginPath();
+            pathCtx.moveTo(pathPoints[0].x, pathPoints[0].y);
+            for (let i = 1; i < pathPoints.length; i++) {
+                pathCtx.lineTo(pathPoints[i].x, pathPoints[i].y);
+            }
+            pathCtx.stroke();
+
+            // 2. Overlay dots for each point for better precision
+            pathCtx.fillStyle = '#ffffff';
+            pathPoints.forEach(p => {
+                pathCtx.beginPath();
+                pathCtx.arc(p.x, p.y, 4, 0, Math.PI * 2);
+                pathCtx.fill();
+            });
+
+            // 3. Draw distance markers (Ruler)
+            pathCtx.font = 'bold 24px Outfit';
+            pathCtx.textAlign = 'center';
+            for (let x = 0; x <= 52000; x += 1000) {
+                const km = x / 1000;
+                const isMilestone = (km % 5 === 0);
+
+                pathCtx.strokeStyle = isMilestone ? '#fbbf24' : '#475569';
+                pathCtx.lineWidth = isMilestone ? 4 : 2;
+
+                pathCtx.beginPath();
+                pathCtx.moveTo(x, 0);
+                pathCtx.lineTo(x, 100);
+                pathCtx.stroke();
+
+                if (isMilestone || km % 1 === 0) {
+                    pathCtx.fillStyle = isMilestone ? '#fbbf24' : '#94a3b8';
+                    pathCtx.fillText(km + ' km', x, 130);
+                }
+
+                // Highlight 20km Goal
+                if (km === 20) {
+                    pathCtx.fillStyle = '#ef4444';
+                    pathCtx.fillText('🏁 GOAL (20km)', x, 160);
+                    pathCtx.strokeStyle = '#ef4444';
+                    pathCtx.lineWidth = 6;
+                    pathCtx.beginPath();
+                    pathCtx.moveTo(x, 0);
+                    pathCtx.lineTo(x, 4000);
+                    pathCtx.stroke();
+                }
+            }
+        }
+        function undoPath() { pathPoints.pop(); drawPathLine(); }
+        function clearPath() { pathPoints = []; drawPathLine(); }
+        function selectBlock(b) { if (selectedBlock) selectedBlock.el.classList.remove('selected'); selectedBlock = b; if (b) b.el.classList.add('selected'); }
+
+        window.addEventListener('keydown', (e) => {
+            if ((e.key === 'Delete' || e.key === 'Backspace') && selectedBlock && mode === 'block') {
+                selectedBlock.el.remove(); placedBlocks = placedBlocks.filter(b => b.id !== selectedBlock.id); selectedBlock = null;
+            }
+        });
+
+        function clearAll() { if (confirm('Clear all?')) { placedBlocks.forEach(b => b.el.remove()); placedBlocks = []; pathPoints = []; drawPathLine(); selectedBlock = null; } }
+        function openExport() {
+            const data = placedBlocks.sort((a, b) => a.x - b.x).map(b => ({ type: b.type, x: Math.round(b.x), y: Math.round(b.y) }));
+            document.getElementById('exportText').value = JSON.stringify({ TRACK_DATA: data, TRACK_POINTS: pathPoints }, null, 2);
+            document.getElementById('export-panel').style.display = 'block';
+        }
+        function closeExport() { document.getElementById('export-panel').style.display = 'none'; }
+        function copyExport() { document.getElementById('exportText').select(); document.execCommand('copy'); alert('Copied!'); }
+    </script>
+</body>
+
+</html>
